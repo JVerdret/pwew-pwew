@@ -34,8 +34,11 @@ function shoot()
 
 function collisions()
 {
+    two_player_collision();
     bullet_collision();
+    shot_collision();
     player_collision();
+    ennemy_collision();
     player_falling();
 }
 
@@ -55,6 +58,35 @@ function bullet_collision()
 
 }
 
+function shot_collision()
+{
+    //collision between bullet and ennemy
+    for (var i = 0; i < player1.bullets.length; i++)
+    {
+        if (Math.abs((ennemy1.graphic.position.x - 1) - ((player1.bullets[i].position.x - 0.5))) < 5 &&
+            Math.abs((ennemy1.graphic.position.y - 1) - ((player1.bullets[i].position.y - 0.5))) < 5)
+        {
+            scene.remove(player1.bullets[i]);
+            player1.bullets.splice(i, 1);
+            i--;
+            ennemy1.dead();
+            scene.remove(ennemy1.graphic);
+            scene.remove(ennemy1);
+        }
+    }
+}
+
+function two_player_collision() {
+    if (Math.abs((ennemy1.graphic.position.x - 1) - ((player1.graphic.position.x - 0.5))) < 10 &&
+        Math.abs((ennemy1.graphic.position.y - 1) - ((player1.graphic.position.y - 0.5))) < 10)
+    {
+        if (player1.life === 1)
+            player1.dead();
+        else
+            player1.life = player1.life - 0.1;
+    }
+}
+
 function player_collision()
 {
     //collision between player and walls
@@ -63,10 +95,31 @@ function player_collision()
 
     if ( x > WIDTH )
         player1.graphic.position.x -= x - WIDTH;
+    if (x < 0)
+        player1.graphic.position.x -= x;
     if ( y < 0 )
         player1.graphic.position.y -= y;
     if ( y > HEIGHT )
         player1.graphic.position.y -= y - HEIGHT;
+
+}
+
+function ennemy_collision()
+{
+    //collision between player and walls
+    var x = ennemy1.graphic.position.x + WIDTH / 2;
+    var y = ennemy1.graphic.position.y + HEIGHT / 2;
+
+    if ( x > WIDTH )
+        ennemy1.graphic.position.x -= x;
+    if (x < 0)
+        ennemy1.graphic.position.x -= x;
+    if ( y < 0 )
+        ennemy1.graphic.position.y -= y;
+        ennemy1.position.y -= y;
+    if ( y > HEIGHT )
+        ennemy1.graphic.position.y -= y;
+        ennemy1.position.y -= y;
 
 }
 
