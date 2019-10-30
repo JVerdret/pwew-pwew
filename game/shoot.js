@@ -82,8 +82,10 @@ function two_player_collision() {
     {
         if (player1.life === 1)
             player1.dead();
-        else
-            player1.life = player1.life - 0.1;
+        else {
+            player1.life = player1.life - 1;
+            ennemy1.graphic.position.x = 150;
+        }
     }
 }
 
@@ -146,7 +148,13 @@ function player_falling()
             && (y > tileY) 
             && (y < mtileY))
         {
-            player1.dead();
+            if (player1.life === 1)
+                player1.dead();
+            else {
+                player1.life = player1.life - 1;
+                player1.graphic.position.x = 50;
+                player1.graphic.position.y = 0;
+            }
         }
     }
 
